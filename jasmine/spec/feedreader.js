@@ -28,18 +28,18 @@ $(function() {
 
         // TODO: We should also check that the URL is a valid URL
         it('have an URL', function() {
-        	for (var i = 0; i < allFeeds.length; i++) {
-        		expect(allFeeds[i].url).toBeDefined();
-        		expect(allFeeds[i].url.length).not.toBe(0);
-        	}
+            for (var i = 0; i < allFeeds.length; i++) {
+                expect(allFeeds[i].url).toBeDefined();
+                expect(allFeeds[i].url.length).not.toBe(0);
+            }
         });
 
-       it('have a name', function(){
-      	for (var i = 0; i < allFeeds.length; i++) {
-      		expect(allFeeds[i].name).toBeDefined();
-      		expect(allFeeds[i].name.length).not.toBe(0);
-      	}
-       });
+        it('have a name', function(){
+            for (var i = 0; i < allFeeds.length; i++) {
+                expect(allFeeds[i].name).toBeDefined();
+                expect(allFeeds[i].name.length).not.toBe(0);
+            }
+        });
 
     });
 
@@ -51,43 +51,59 @@ $(function() {
        });
 
         it('toggles when the hamburger button is clicked', function() {
-          /* Get the current state of the menu */
-          var open = $('body').hasClass('menu-hidden');
+            /* Get the current state of the menu */
+            var open = $('body').hasClass('menu-hidden');
 
-          /* Click the hamburger button then check that the menu state has
-           * changed. */
-          $('.menu-icon-link').click();
+            /* Click the hamburger button then check that the menu state has
+            * changed. */
+            $('.menu-icon-link').click();
 
-          expect($('body').hasClass('menu-hidden')).not.toBe(open);
+            expect($('body').hasClass('menu-hidden')).not.toBe(open);
 
-          /* Click the hamburger button again then check that the menu state has
-           * returned to the beginning state. */
-          $('.menu-icon-link').click();
+            /* Click the hamburger button again then check that the menu state has
+            * returned to the beginning state. */
+            $('.menu-icon-link').click();
 
-          expect($('body').hasClass('menu-hidden')).toBe(open);
+            expect($('body').hasClass('menu-hidden')).toBe(open);
         });
+
+        // TODO: closes when a list item is clicked
 
     });
 
 
     describe('Initial Entries', function() {
 
-      /* TODO: Write a test that ensures when the loadFeed
-       * function is called and completes its work, there is at least
-       * a single .entry element within the .feed container.
-       * Remember, loadFeed() is asynchronous so this test wil require
-       * the use of Jasmine's beforeEach and asynchronous done() function.
-       */
+        beforeEach(function(done) {
+            loadFeed(1, function() { done(); });
+        });
 
+        it('have at least one entry', function(done) {
+            expect($('.feed .entry').length).toBeGreaterThan(0);
+            done();
+        });
     });
 
 
     describe('New Feed Selection', function() {
 
-      /* TODO: Write a test that ensures when a new feed is loaded
-       * by the loadFeed function that the content actually changes.
-       * Remember, loadFeed() is asynchronous.
-       */
+        var postTitle;
+
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                postTitle = $('.feed .entry h2').text();
+                loadFeed(1, function() {
+                    done();
+                });
+            });
+        });
+
+        it('contains different content', function(done) {
+            console.log(postTitle);
+            console.log($('.feed .entry h2').text());
+            expect($('.feed .entry h2').text()).not.toBe(postTitle);
+            done();
+        });
 
     });
 
