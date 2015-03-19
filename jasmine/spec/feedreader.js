@@ -26,11 +26,17 @@ $(function() {
             expect(allFeeds.length).not.toBe(0);
         });
 
-        // TODO: We should also check that the URL is a valid URL
         it('have an URL', function() {
             for (var i = 0; i < allFeeds.length; i++) {
                 expect(allFeeds[i].url).toBeDefined();
                 expect(allFeeds[i].url.length).not.toBe(0);
+            }
+        });
+
+        it('have valid URLs', function() {
+            var urlregex = /^(https?|ftp):\/\/[a-z0-9-]+(\.[a-z0-9-]+)+([/?].+)?$/;
+            for (var i = 0; i < allFeeds.length; i++) {
+                expect(allFeeds[i].url).toMatch(urlregex);
             }
         });
 
