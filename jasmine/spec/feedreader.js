@@ -52,9 +52,9 @@ $(function() {
 
     describe('The menu', function() {
 
-       it('is hidden by default', function() {
-         expect($('body').hasClass('menu-hidden')).toBe(true);
-       });
+        it('is hidden by default', function() {
+            expect($('body').hasClass('menu-hidden')).toBe(true);
+        });
 
         it('toggles when the hamburger button is clicked', function() {
             /* Get the current state of the menu */
@@ -73,7 +73,13 @@ $(function() {
             expect($('body').hasClass('menu-hidden')).toBe(open);
         });
 
-        // TODO: closes when a list item is clicked
+        it('closes when a feed is selected', function() {
+            /* Open the menu. Click the first item. */
+            $('body').toggleClass('menu-hidden', false);
+            $('.feed-list a').first().click();
+
+            expect($('body').hasClass('menu-hidden')).toBe(true);
+        });
 
     });
 
@@ -105,8 +111,6 @@ $(function() {
         });
 
         it('contains different content', function(done) {
-            console.log(postTitle);
-            console.log($('.feed .entry h2').text());
             expect($('.feed .entry h2').text()).not.toBe(postTitle);
             done();
         });

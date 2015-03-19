@@ -4,8 +4,10 @@ In this project you are given a web-based application that reads RSS feeds. The 
 
 # Additional Tests
 
-* In the RSS Feeds suite, add a test to make sure that the URL values in allFeeds
+* In the "RSS Feeds" suite, add a test to make sure that the URL values in allFeeds
 are actually URLs
+* In the "The Menu" suite, add a test to make sure that the menu closes when
+users select a feed from the menu.
 
 # References
 
