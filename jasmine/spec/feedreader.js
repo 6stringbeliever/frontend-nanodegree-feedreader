@@ -99,11 +99,13 @@ $(function() {
 
     describe('New Feed Selection', function() {
 
-        var postTitle;
+        var postTitle,
+			headerText;
 
         beforeEach(function(done) {
             loadFeed(0, function() {
                 postTitle = $('.feed .entry h2').text();
+				headerText = $('h1.header-title').text();
                 loadFeed(1, function() {
                     done();
                 });
@@ -114,6 +116,11 @@ $(function() {
             expect($('.feed .entry h2').text()).not.toBe(postTitle);
             done();
         });
+		
+		it('updates the feed title', function(done) {
+			expect($('h1.header-title').text()).not.toBe(headerText);
+			done();
+		});
 
     });
 
