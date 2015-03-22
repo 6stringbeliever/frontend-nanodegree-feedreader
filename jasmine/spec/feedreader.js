@@ -202,7 +202,7 @@ $(function() {
             /* Verify that we've added one feed to allFeeds and that we've
                 updated the feed list in the menu. */
             expect(allFeeds.length).toBe(startingFeedNum + 1);
-            expect($('.feed-list li:contains(' + feedName + ')').length)
+            expect($('.feed-list li:contains(""' + feedName + '"")').length)
                 .toBeGreaterThan(0);
         });
     });
