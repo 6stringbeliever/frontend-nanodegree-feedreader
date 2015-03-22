@@ -100,12 +100,12 @@ $(function() {
     describe('New Feed Selection', function() {
 
         var postTitle,
-			headerText;
+            headerText;
 
         beforeEach(function(done) {
             loadFeed(0, function() {
                 postTitle = $('.feed .entry h2').text();
-				headerText = $('h1.header-title').text();
+                headerText = $('h1.header-title').text();
                 loadFeed(1, function() {
                     done();
                 });
@@ -116,12 +116,95 @@ $(function() {
             expect($('.feed .entry h2').text()).not.toBe(postTitle);
             done();
         });
-		
-		it('updates the feed title', function(done) {
-			expect($('h1.header-title').text()).not.toBe(headerText);
-			done();
-		});
 
+        it('updates the feed title', function(done) {
+            expect($('h1.header-title').text()).not.toBe(headerText);
+            done();
+        });
+
+    });
+
+    describe('Add new feed dialog', function() {
+
+        beforeEach(function() {
+            /* Open the menu. Click the add new feed button. */
+            $('body').toggleClass('menu-hidden', false);
+            $('#menu-add-new-feed').click();
+        });
+
+        afterEach(function() {
+            /* Hide the menu. Hide the dialog. Clear the dialog fields.*/
+            $('body').toggleClass('menu-hidden', true);
+            $('#add-feed-dialog').toggleClass('dialog-hidden', true);
+            $('#new-feed-name').val('');
+            $('#new-feed-url').val('');
+        });
+
+        it('displays when "Add New Feed" is clicked', function() {
+            expect($('#add-feed-dialog').length).toBeGreaterThan(0);
+            expect($('#add-feed-dialog').hasClass('dialog-hidden')).toBe(false);
+        });
+
+        it('closes the menu when "Add New Feed" is clicked', function() {
+            expect($('body').hasClass('menu-hidden')).toBe(true);
+        });
+
+        it('displays an error if user does not enter a name', function() {
+            var feedName = '';
+            var feedURL = 'http://daringfireball.net/feeds/main';
+
+            /* Fill in the dialog. Valid URL. No Name. Click the button. */
+            $('#new-feed-name').val(feedName);
+            $('#new-feed-url').val(feedURL);
+            $('#new-feed-submit').click();
+
+            /* Verify that there is an error message. */
+            expect($('#add-feed-dialog .error-message').length).toBeGreaterThan(0);
+        });
+
+        it('displays an error if user enters an invalid URL', function() {
+            var feedName = 'Legit Feed Name';
+            var feedURL = 'Not a legit URL dot com tilde php dot rss';
+
+            /* Fill in the dialog. Valid Name. Invalid URL. Click the button. */
+            $('#new-feed-name').val(feedName);
+            $('#new-feed-url').val(feedURL);
+            $('#new-feed-submit').click();
+
+            /* Verify that there is an error message. */
+            expect($('#add-feed-dialog .error-message').length).toBeGreaterThan(0);
+        });
+
+        it('closes when the user adds a valid feed', function() {
+            var feedName = 'Daring Fireball';
+            var feedURL = 'http://daringfireball.net/feeds/main';
+
+            /* Fill in the dialog. Valid Name. Valid URL. Click the button. */
+            $('#new-feed-name').val(feedName);
+            $('#new-feed-url').val(feedURL);
+            $('#new-feed-submit').click();
+
+            /* Verify that there is no error message and the window is hidden. */
+            expect($('#add-feed-dialog .error-message').length).toBe(0);
+            expect($('#add-feed-dialog').hasClass('dialog-hidden')).toBe(true);
+        });
+
+        it('adds a valid feed to the menu', function() {
+            var startingFeedNum = allFeeds.length;
+            var feedName = 'Daring Fireball';
+            var feedURL = 'http://daringfireball.net/feeds/main';
+
+            /* Fill in the dialog. Valid Name. Valid URL. Click the button. */
+            $('#new-feed-name').val(feedName);
+            $('#new-feed-url').val(feedURL);
+            $('#new-feed-submit').click();
+
+            /* Verify that we've added one feed to allFeeds and that we've
+                updated the feed list in the menu. */
+            expect(allFeeds.length).toBe(startingFeedNum + 1);
+            expect($('.feed-list li:contains(' + feedName + ')').length)
+                .toBeGreaterThan(0);
+        });
     });
 
 }());
